@@ -2,4 +2,4 @@ geth
 .vscode
 geth-mac
 geth-windows.exe
-
+node_modules
