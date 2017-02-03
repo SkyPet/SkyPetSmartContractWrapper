@@ -1,10 +1,12 @@
 const Web3 = require('web3');
 const os=require('os');
+const appRoot = require('app-root-path').path;//+process.env.binaryPath?`/${process.env.binaryPath}`:"";
+const gethBinaries=appRoot+process.env.binaryPath?`/${process.env.binaryPath}`:"";
 const child_process = require('child_process');
 const uuid = require('node-uuid');
 const url = require('url');
 const path = require('path');
-const testing=process.env.GethProduction?false:true;
+const testing=process.env.gethProduction?false:true;
 const gethPath=process.env.gethPath?process.env.gethPath:os.homedir()+"/.ethereum/";
 const gethLocations={
   production:gethPath,
@@ -17,7 +19,7 @@ const getGethPath=(fileName, isTest)=>{
 const ipcPath=getGethPath('geth.ipc', testing);
 const ethPath=getGethPath("", false);
 const datadir=getGethPath('geth/lightchaindata', testing);
-const gethCommand=process.platform === 'darwin'?`./geth-mac`:process.platform==='win32'?`geth-windows`:`./geth`;
+const gethCommand=process.platform === 'darwin'?`${gethBinaries}/geth-mac`:process.platform==='win32'?`${gethBinaries}/geth-windows`:`${gethBinaries}/geth`;
 //const gethCommand=process.platform === 'darwin'?`geth-mac`:process.platform==='win32'?`geth-windows`:`./geth`;
 //make these automatically generated!!
 const contractAddress='0x72c1bba9cabab4040c285159c8ea98fd36372858'; 
