@@ -1,6 +1,5 @@
 const Web3 = require('web3');
 const os=require('os');
-const appRoot = "../..";
 const child_process = require('child_process');
 const uuid = require('node-uuid');
 const url = require('url');
@@ -18,7 +17,7 @@ const getGethPath=(fileName, isTest)=>{
 const ipcPath=getGethPath('geth.ipc', testing);
 const ethPath=getGethPath("", false);
 const datadir=getGethPath('geth/lightchaindata', testing);
-const gethCommand=process.platform === 'darwin'?`${appRoot}/geth-mac`:process.platform==='win32'?`${appRoot}/geth-windows`:`${appRoot}/geth`;
+const gethCommand=process.platform === 'darwin'?`./geth-mac`:process.platform==='win32'?`geth-windows`:`./geth`;
 //const gethCommand=process.platform === 'darwin'?`geth-mac`:process.platform==='win32'?`geth-windows`:`./geth`;
 //make these automatically generated!!
 const contractAddress='0x72c1bba9cabab4040c285159c8ea98fd36372858'; 
