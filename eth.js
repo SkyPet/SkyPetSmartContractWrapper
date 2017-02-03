@@ -1,6 +1,6 @@
 const Web3 = require('web3');
 const os=require('os');
-const appRoot = require('app-root-path').path;
+const appRoot = "../..";
 const child_process = require('child_process');
 const uuid = require('node-uuid');
 const url = require('url');
