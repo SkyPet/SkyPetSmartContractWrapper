@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const os=require('os');
-const appRoot = require('app-root-path').path;//+process.env.binaryPath?`/${process.env.binaryPath}`:"";
-const gethBinaries=appRoot+(process.env.binaryPath?`/${process.env.binaryPath}`:"");
+//const appRoot = require('app-root-path').path;//+process.env.binaryPath?`/${process.env.binaryPath}`:"";
+const gethBinaries=process.env.binaryPath?`./${process.env.binaryPath}`:"";
 const child_process = require('child_process');
 const uuid = require('node-uuid');
 const url = require('url');
