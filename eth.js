@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const os=require('os');
 //const appRoot = require('app-root-path').path;//+process.env.binaryPath?`/${process.env.binaryPath}`:"";
-const gethCommand=process.env.binaryPath;
+//const gethCommand=process.env.binaryPath;
 const child_process = require('child_process');
 const uuid = require('node-uuid');
 const url = require('url');
@@ -132,7 +132,7 @@ const getSync=(progressCB, endCB)=>{
     });
 }
 /**Spawns geth and opens web3.  Defaults to localhost:8545.  This should never be called from a public HTTP request! */
-const getEthereumStart=(cb, provider="http://localhost:8545")=>{
+const getEthereumStart=(gethCommand, cb, provider="http://localhost:8545")=>{
     var geth = child_process.spawn(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal,web3"']);
     const wrappedCallback=()=>{
         geth.stderr.removeAllListeners();
