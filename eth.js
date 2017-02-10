@@ -132,11 +132,12 @@ const getSync=(progressCB, endCB)=>{
     });
 }
 /**Spawns geth and opens web3.  Defaults to localhost:8545.  This should never be called from a public HTTP request! */
-const getEthereumStart=(gethCommand, cb, provider="http://localhost:8545")=>{
-    var geth = child_process.spawn(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal,web3"']);
+const getEthereumStart=(gethCommand, cb, port=8545)=>{
+    const commands=['--rpc', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal,web3"', `--rpcport=${port}`];
+    var geth = child_process.spawn(gethCommand, testing?commands.concat([ '--testnet']):commands);
     const wrappedCallback=()=>{
         geth.stderr.removeAllListeners();
-        web3.setProvider(new web3.providers.HttpProvider(provider));
+        web3.setProvider(new web3.providers.HttpProvider(`http://localhost:${port}`));
         cb(geth);
     }   
     //geth sends data on stderr pipe instead of stdout
