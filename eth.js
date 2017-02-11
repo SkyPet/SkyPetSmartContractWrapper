@@ -7,18 +7,18 @@ const uuid = require('node-uuid');
 const url = require('url');
 const path = require('path');
 const testing=process.env.gethProduction?false:true;
-const gethPath=process.env.gethPath?process.env.gethPath:os.homedir()+"/.ethereum/";
+const gethPath=path.join(process.env.gethPath?process.env.gethPath:os.homedir(), ".ethereum");
 const gethLocations={
   production:gethPath,
-  testing:gethPath+'testnet/'
+  testing:path.join(gethPath, 'testnet')
 };
 var web3=new Web3();
 const getGethPath=(fileName, isTest)=>{
-  return (isTest?gethLocations.testing:gethLocations.production)+fileName;
+  return path.join(isTest?gethLocations.testing:gethLocations.production, fileName);
 }
 const ipcPath=getGethPath('geth.ipc', testing);
 const ethPath=getGethPath("", false);
-const datadir=getGethPath('geth/lightchaindata', testing);
+const datadir=getGethPath(path.join('geth', 'lightchaindata'), testing);
 //const gethCommand=process.platform === 'darwin'?`${gethBinaries}/geth-mac`:process.platform==='win32'?`${gethBinaries}/geth-windows`:`${gethBinaries}/geth`;
 //const gethCommand=process.platform === 'darwin'?`geth-mac`:process.platform==='win32'?`geth-windows`:`./geth`;
 //make these automatically generated!!
