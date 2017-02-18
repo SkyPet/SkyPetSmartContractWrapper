@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/SkyPet/SkyPetSmartContractWrapper#readme",
   "dependencies": {
-    "app-root-path": "^2.0.1",
     "node-uuid": "^1.4.7",
     "web3": "^0.18.2"
   }
