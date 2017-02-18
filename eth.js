@@ -5,6 +5,7 @@ const uuid = require('node-uuid');
 const url = require('url');
 const path = require('path');
 const fs=require('fs');
+const pkginfo = require('pkginfo')(module, 'name');
 const testing=process.env.gethProduction?false:true;
 const gethPath=path.join(process.env.gethPath?process.env.gethPath:os.homedir(), ".ethereum");
 const gethLocations={
@@ -18,9 +19,17 @@ const getGethPath=(fileName, isTest)=>{
 const ipcPath=getGethPath('geth.ipc', testing);
 const ethPath=getGethPath("", false);
 const datadir=getGethPath(path.join('geth', 'lightchaindata'), testing);
-const metaData=JSON.parse(fs.readFileSync(path.resolve("./SkyPet.json")));
-const contractAddress=metaData.contractAddress;
-const abi=metaData.abi;
+let contractAddress;
+let abi;
+const parseSkyPet=(err, rawBytes)=>{
+    const metaData=JSON.parse(rawBytes);
+    contractAddress=metaData.contractAddress;
+    abi=metaData.abi;
+}
+
+fs.readFile(path.resolve(`./node_modules/${module.exports.name}/SkyPet.json`), (err, data)=>{
+    err?fs.readFile(path.resolve("./SkyPet.json"), parseSkyPet):parseSkyPet(err, data);
+});
 
 /**Utility function for an async for-loop */
 const iterateAsyncArray=(n, cb)=>{
