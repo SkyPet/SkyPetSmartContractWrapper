@@ -13,6 +13,7 @@ const gethLocations={
   production:gethPath,
   testing:path.join(gethPath, 'testnet')
 };
+const network=testing?"3":"1";//3 is ropsten, 1 is live
 var web3=new Web3();
 const getGethPath=(fileName, isTest)=>{
   return path.join(isTest?gethLocations.testing:gethLocations.production, fileName);
@@ -20,7 +21,7 @@ const getGethPath=(fileName, isTest)=>{
 const ipcPath=getGethPath('geth.ipc', testing);
 const ethPath=getGethPath("", false);
 const datadir=getGethPath(path.join('geth', 'lightchaindata'), testing);
-const contractAddress=metaData.contractAddress;
+const contractAddress=metaData.networks[network].address;
 const abi=metaData.abi;
 
 
@@ -132,7 +133,7 @@ const getSync=(progressCB, endCB)=>{
 }
 /**Spawns geth and opens web3.  Defaults to localhost:8545.  This should never be called from a public HTTP request! */
 const getEthereumStart=(gethCommand, cb, port=8545)=>{
-    const commands=['--rpc', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal,web3"', `--rpcport=${port}`];
+    const commands=['--rpc', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal"', `--rpcport=${port}`];
     var geth = child_process.spawn(gethCommand, testing?commands.concat([ '--testnet']):commands);
     const wrappedCallback=()=>{
         geth.stderr.removeAllListeners();
