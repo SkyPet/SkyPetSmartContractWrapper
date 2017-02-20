@@ -133,7 +133,7 @@ const getSync=(progressCB, endCB)=>{
 }
 /**Spawns geth and opens web3.  Defaults to localhost:8545.  This should never be called from a public HTTP request! */
 const getEthereumStart=(gethCommand, cb, port=8545)=>{
-    const commands=['--rpc', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal"', `--rpcport=${port}`];
+    const commands=['--rpc', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,personal,web3"', `--rpcport=${port}`];
     var geth = child_process.spawn(gethCommand, testing?commands.concat([ '--testnet']):commands);
     const wrappedCallback=()=>{
         geth.stderr.removeAllListeners();
