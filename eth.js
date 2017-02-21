@@ -100,8 +100,17 @@ const createAccount=(password, cb)=>{
 /**Retrieves first account in account list */
 const getAccounts=(cb)=>{
   web3.eth.getAccounts((err, result)=>{
-    if(err||!results||result.length===0){
+    if(err){
        return cb(err||"error", null); 
+    }
+    else if(!result){
+        return cb(err||"error", null); 
+    }
+    else if(result.constructor !== Array){
+        return cb(err||"error", null); 
+    }
+    else if(result.length===0){
+        return cb(err||"error", null); 
     }
     else{
         web3.eth.defaultAccount=result[0];
