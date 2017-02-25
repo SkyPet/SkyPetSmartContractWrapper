@@ -1,6 +1,6 @@
 {
   "name": "skypetwrapper",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "Wraps the skypet smart contract and exposes the attributes to a calling program",
   "main": "eth.js",
   "scripts": {
