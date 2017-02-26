@@ -37,7 +37,7 @@ const iterateAsyncArray=(n, cb)=>{
     return Promise.all(results);
 }
 /**Wrapper for two of the contract functions.  First, it gets the total number of attributes for the given hash, and second it retreives the attribute for each index.  Contract is the instance of the smart contract, hashId is the hash identifying the pet, and callback takes three arguments: resolve, reject from the Promise and index for the location of the attribute*/
-const getAttributes=(contract, hashId, cb)=>{
+const getAttributes=( contract, hashId, cb)=>{
     contract.getNumberOfAttributes(hashId, (err, result)=>{
         const maxIndex=result.c[0];
         iterateAsyncArray(maxIndex, (resolve, reject, index)=>{
@@ -55,14 +55,14 @@ const getCost=(contract, cb)=>{
     });
 }
 /**Gets cost, current balance, unlocks account, and uploads the attribute.  */
-const addAttribute=(password, message, hashId, contract, cb)=>{
+const addAttribute=(account, password, message, contract, hashId, cb)=>{
     const msToKeepAccountUnlocked=3000;
     contract.costToAdd((err1, cost)=>{
-        web3.eth.getBalance(web3.eth.defaultAccount, (err2, balance)=>{
+        web3.eth.getBalance(account, (err2, balance)=>{
             if(cost.greaterThan(balance)){
                 return cb("Not enough Ether!", null);
             }
-            web3.personal.unlockAccount(web3.eth.defaultAccount, password, msToKeepAccountUnlocked, (err3, arg)=>{
+            web3.personal.unlockAccount(account, password, msToKeepAccountUnlocked, (err3, arg)=>{
                 return err3?cb("Incorrect Password", null):contract.addAttribute.sendTransaction(hashId, message,
                 {value:cost, gas:3000000}, (err, results)=>{
                     return err?cb(err, null):cb(null, results);
@@ -72,22 +72,22 @@ const addAttribute=(password, message, hashId, contract, cb)=>{
     });
 }
 /**Sets up watcher for the contract.  If anything happens to the attributes associated with the hashID then updates the attributes values and updates the money available.  Note that this is doesn't alter anything in the contract, but simply is a utility function to alert the UI for changes */
-const watchContract=(contract, hashId,  attributeCB, moneyCB)=>{
+const watchContract=(account, contract, hashId,  attributeCB, moneyCB)=>{
     contract.attributeAdded({_petid:hashId}, (error, result)=>{
         if(error){
             return cb(error, null);
         }
         getAttributes(contract, hashId, attributeCB);
-        getMoneyInAccount(web3.eth.defaultAccount, moneyCB);
+        getMoneyInAccount(account, moneyCB);
     });
 }
 const getContract=()=>{
     return web3.eth.contract(abi).at(contractAddress);
 }
 /**Function which checks if password is correct.  This shouldn't be used frequently if at all since the only purpose for unlocking the account is when conducting a transaction and if the password fails in the transaction there already exists a callback which can alert the user.  See addAttribute for an example.  */
-const checkPassword=(password, cb)=>{
+const checkPassword=(account, password, cb)=>{
     const msToKeepAccountUnlocked=1;
-    web3.personal.unlockAccount(web3.eth.defaultAccount, password, msToKeepAccountUnlocked, (err, arg)=>{
+    web3.personal.unlockAccount(account, password, msToKeepAccountUnlocked, (err, arg)=>{
         return err?cb(err, null):cb(null, arg);
     });
 }
@@ -113,7 +113,7 @@ const getAccounts=(cb)=>{
         return cb(err||"error", null); 
     }
     else{
-        web3.eth.defaultAccount=result[0];
+        //web3.eth.defaultAccount=result[0];
         return cb(null, result[0]);
     }
   });
